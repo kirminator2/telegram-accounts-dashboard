@@ -16,6 +16,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Download, Trash, CheckSquare } from "lucide-react";
 
@@ -26,6 +33,7 @@ const accounts = [
     name: "@alex_smith",
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
     status: "Active",
+    project: "Marketing",
     timeSpent: "2h 15m",
     lastActive: "2024-02-20",
     posts: 156,
@@ -36,6 +44,7 @@ const accounts = [
     name: "@emma_wilson",
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
     status: "Inactive",
+    project: "Sales",
     timeSpent: "45m",
     lastActive: "2024-02-19",
     posts: 89,
@@ -46,6 +55,7 @@ const accounts = [
     name: "@john_doe",
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
     status: "Suspended",
+    project: "Support",
     timeSpent: "5h 30m",
     lastActive: "2024-02-18",
     posts: 234,
@@ -53,13 +63,25 @@ const accounts = [
   },
 ];
 
+const projects = ["All Projects", "Marketing", "Sales", "Support"];
+const statuses = ["All Statuses", "Active", "Inactive", "Suspended"];
+
 export function AccountsTable() {
   const [selectedAccounts, setSelectedAccounts] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProject, setSelectedProject] = useState("All Projects");
+  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
 
-  const filteredAccounts = accounts.filter((account) =>
-    account.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredAccounts = accounts.filter((account) => {
+    const matchesSearch = account.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesProject =
+      selectedProject === "All Projects" || account.project === selectedProject;
+    const matchesStatus =
+      selectedStatus === "All Statuses" || account.status === selectedStatus;
+    return matchesSearch && matchesProject && matchesStatus;
+  });
 
   const toggleSelection = (id: number) => {
     setSelectedAccounts((prev) =>
@@ -84,14 +106,46 @@ export function AccountsTable() {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-4">
-        <Input
-          placeholder="Search accounts..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
-        />
-        <div className="space-x-2">
+      <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <Input
+            placeholder="Search accounts..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-xs"
+          />
+          <Select
+            value={selectedProject}
+            onValueChange={setSelectedProject}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select project" />
+            </SelectTrigger>
+            <SelectContent>
+              {projects.map((project) => (
+                <SelectItem key={project} value={project}>
+                  {project}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            value={selectedStatus}
+            onValueChange={setSelectedStatus}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select status" />
+            </SelectTrigger>
+            <SelectContent>
+              {statuses.map((status) => (
+                <SelectItem key={status} value={status}>
+                  {status}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-2">
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             Export
@@ -122,6 +176,7 @@ export function AccountsTable() {
                 />
               </TableHead>
               <TableHead>Account</TableHead>
+              <TableHead>Project</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Time Spent</TableHead>
               <TableHead>Last Active</TableHead>
@@ -152,6 +207,7 @@ export function AccountsTable() {
                     <span className="font-medium">{account.name}</span>
                   </div>
                 </TableCell>
+                <TableCell>{account.project}</TableCell>
                 <TableCell>
                   <Badge
                     variant="secondary"
