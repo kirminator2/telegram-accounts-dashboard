@@ -7,7 +7,7 @@ const Parsing = () => {
   return (
     <PageLayout title={t("parsing")} description={t("manageParsing")}>
       <div className="space-y-8">
-        {/* Table implementation will be added later */}
+        {/* Parsing content will be added later */}
         <div>Parsing content coming soon</div>
       </div>
     </PageLayout>
