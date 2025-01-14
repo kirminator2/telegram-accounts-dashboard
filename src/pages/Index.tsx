@@ -7,7 +7,7 @@ import { StatsCards } from "@/components/StatsCards";
 const Index = () => {
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <div className="min-h-screen flex w-full bg-background text-foreground">
         <AppSidebar />
         <div className="flex-1 flex flex-col">
           <AppHeader />
