@@ -6,6 +6,12 @@ import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import Tasks from "./pages/Tasks";
+import Audiences from "./pages/Audiences";
+import Parsing from "./pages/Parsing";
+import Affiliate from "./pages/Affiliate";
+import Statistics from "./pages/Statistics";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +25,12 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/tasks" element={<Tasks />} />
+              <Route path="/audiences" element={<Audiences />} />
+              <Route path="/parsing" element={<Parsing />} />
+              <Route path="/affiliate" element={<Affiliate />} />
+              <Route path="/statistics" element={<Statistics />} />
+              <Route path="/settings" element={<Settings />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
